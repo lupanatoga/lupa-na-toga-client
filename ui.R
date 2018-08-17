@@ -9,12 +9,13 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       uiOutput("orgao"),
-      uiOutput("lotacao")
+      uiOutput("mes")
     ),
     
     # Show a plot of the generated graph
     mainPanel(
-      plotlyOutput("pointsPlot")
+      plotlyOutput("pointsPlot"),
+      plotlyOutput("linesPlot")
     )
   )
 
