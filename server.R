@@ -21,27 +21,39 @@ shinyServer(function(input, output) {
   sumario <- salarios %>% group_by(nome) %>% summarise(auxilio = sum(total))
   
   output$pointsPlot <- renderPlotly({
-    
     plot_ly(data = sumario, 
-            x = ~ abs(auxilio), 
-            y = 0, 
-            hoverinfo = 'text'
-            # text = ~ paste(
-            #   "Nome: ", nome,
-            #   "\nCargo: ", cargo,
-            #   "\nLotação: ", lotacao,
-            #   "\nOrgao: ", orgao
+            x = ~ auxilio, 
+            y = 0,
+            hoverinfo = 'text',
+            source = "juiz",
+            text = ~ nome
             )
   })
   
-  salarios_um = salarios %>% filter(nome == "ABDIAS PATRICIO OLIVEIRA")
   output$linesPlot = renderPlotly({
-    plot_ly(data = salarios_um,
-            y = ~ total,
-            x = ~ mes,
-            type = "scatter",
-            mode = "lines"
-    )
+    s <- event_data("plotly_click", source = "juiz")
+    if(length(s)) {
+      juiz = sumario[s[["pointNumber"]]+1,]
+      salarios_um = salarios %>% filter(nome == juiz$nome)
+    
+      plot_ly(data = salarios_um,
+              y = ~ total,
+              x = ~ mes,
+              type = "scatter",
+              mode = "lines"
+      )
+    } else {
+      plotly_empty()
+    }
+  })
+  
+  output$treemap  = renderPlotly({
+    s <- event_data("plotly_click", source = "juiz")
+    if(length(s)) {
+      
+    } else {
+      plotly_empty()
+    }
   })
   
   
