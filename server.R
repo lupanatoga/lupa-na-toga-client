@@ -76,6 +76,12 @@ shinyServer(function(input, output) {
     input$sunburst_mouseover
   })
   
+  output$fistPlot <- renderSunburst({
+    d <- data.frame(group = c("subsidio","direitos_pessoais-abono_de_permanencia", "direitos_pessoais-subsidio_outra1", "indenizacoes-ajuda_de_custo","indenizacoes-indenizacoes_outros","direitos_eventuais-indenizacao_de_ferias","direitos_eventuais-abono_contitucional_de_1_3_de_ferias","direitos_eventuais-antecipacao_de_ferias","direitos_eventuais-gratificacao_natalina","direitos_eventuais-antecipacao_de_gratificacao_natalina","direitos_eventuais-substituicao","direitos_eventuais-gratificacao_por_exercicio_cumulativo","direitos_eventuais-gratificacao_por_encargo_curso_concurso","direitos_eventuais-pagamento_em_retroativos","direitos_eventuais-jeton", "indenizacoes-auxilio-auxilio_alimentacao", "indenizacoes-auxilio-auxilio_pre_escolar", "indenizacoes-auxilio-auxilio_saude", "indenizacoes-auxilio-auxilio_natalidade", "indenizacoes-auxilio-auxilio_moradia"),
+                        value = c(sum(data$subsidio), sum(data$abono_de_permanencia), sum(data$subsidio_outra1),sum(data$ajuda_de_custo),sum(data$indenizacoes_outra1 + data$indenizacoes_outra2 + data$indenizacoes_outra3),sum(data$indenizacao_de_ferias),sum(data$abono_contitucional_de_1_3_de_ferias) ,sum(data$antecipacao_de_ferias) ,sum(data$gratificacao_natalina),sum(data$antecipacao_de_gratificacao_natalina),sum(data$substituicao),sum(data$gratificacao_por_exercicio_cumulativo),sum(data$gratificacao_por_encargo_curso_concurso),sum(data$pagamento_em_retroativos),sum(data$jeton),sum(data$auxilio_alimentacao),sum(data$auxilio_pre_escolar), sum(data$auxilio_saude), sum(data$auxilio_natalidade),sum(data$auxilio_moradia)))
+    sunburst(d,count = TRUE)  
+  })
+  
   output$selection = renderText(selection())
   
   output$sumburstPlot  = renderSunburst({
@@ -105,16 +111,38 @@ shinyServer(function(input, output) {
     }
   })
   
+  get_lotacao = function() {
+    return( data_ %>% 
+        filter(nome %in% sumario$nome)) %>% 
+        select(lotacao) %>% 
+        distinct()
+  }
+  
+  get_cargo = function() {
+    return( data_ %>% 
+              filter(nome %in% sumario$nome)) %>% 
+      select(cargo) %>% 
+      distinct()
+  }
   
   output$orgao <- renderUI({
-    selectInput("orgao", "Selecione um Orgão", data$orgao)
+      selectInput("orgao", "Selecione um Orgão", data$orgao)
   })
   
   output$lotacao <- renderUI({
-    selectInput("lotacao", "Selecione uma Lotação", data$lotacao)
+    if(str_length(input$orgao) > 0) {
+      selectInput("lotacao", "Selecione uma Lotação", data$lotacao)
+    } else {
+      selectInput("lotacao", "Selecione uma Lotação", c())
+    }
   })
   
   output$cargo <- renderUI({
-    selectInput("cargo", "Cargo", data$cargo)
+    if(str_length(input$lotacao) > 0 && str_length(input$orgao) > 0) {
+      selectInput("cargo", "Cargo", data$cargo)
+    } else {
+      selectInput("cargo", "Cargo", c())
+    }
   })
+  
 })

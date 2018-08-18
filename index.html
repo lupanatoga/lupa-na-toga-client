@@ -3,20 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Lupa na Toga</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .sumburst {
+
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="titulo">
-            <h1>Lupa na Toga</h1>
+            <h1>Logo</h1>
         </div>
-        <div class="custo">
+        <div class="text-center" style="font-size: 20px;">
             <p>Custos dos magistrados no mes XXXX</p>
             <p>Porem o teto é XXXX, usando os auxilios vai para XXXX</p>
         </div>
-        <div class="treemap">
-            XXXX
+        <div>
+            {{ sunburstOutput("fistPlot") }}
         </div>
         <div class="juizes">
             <div class="row">
@@ -46,13 +51,13 @@
         </div>
         <div class="plots">
             <div class="row">
-                <div class="col">
+                <div class="col col-4">
                     {{ uiOutput("orgao") }}
                 </div>
-                <div class="col">
+                <div class="col col-4">
                     {{ uiOutput("lotacao")}}
                 </div>
-                <div class="col">
+                <div class="col col-4">
                     {{ uiOutput("cargo")}}
                 </div>
             </div>
