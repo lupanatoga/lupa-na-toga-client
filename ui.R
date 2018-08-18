@@ -15,7 +15,9 @@ shinyUI(fluidPage(
     # Show a plot of the generated graph
     mainPanel(
       plotlyOutput("pointsPlot"),
-      plotlyOutput("linesPlot")
+      plotlyOutput("linesPlot"),
+      sunburstOutput("sumburstPlot"),
+      textOutput("selection")
     )
   )
 

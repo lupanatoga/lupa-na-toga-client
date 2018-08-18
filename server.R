@@ -1,6 +1,8 @@
 library(shiny)
 library(tidyverse, warn.conflicts = F)
 library(plotly)
+library(sunburstR)
+library(dplyr)
 
 data = read_csv("./salarios-magistrados-2018-02-05.csv")
 data_1 = read_csv("./salarios-magistrados-2018-02-05.csv") 
@@ -47,12 +49,29 @@ shinyServer(function(input, output) {
     }
   })
   
-  output$treemap  = renderPlotly({
+  selection = reactive({
+    input$sunburst_mouseover
+  })
+  
+  output$selection = renderText(selection())
+  
+  output$sumburstPlot  = renderSunburst({
     s <- event_data("plotly_click", source = "juiz")
     if(length(s)) {
+      juiz = sumario[s[["pointNumber"]]+1,]
       
+      a = salarios %>% filter(nome == juiz$nome) %>% select(indenizacoes, direitos_pessoais, direitos_eventuais)
+      group = colnames(a)
+      a = t(a) %>% as_data_frame() 
+      a$group = group
+      a = a%>% rename(value = V1)
+      a$group <- as.factor(a$group)
+      
+      a = a %>% select(group, value)
+      
+      sunburst(a)
     } else {
-      plotly_empty()
+      sunburst(df[FALSE,])
     }
   })
   

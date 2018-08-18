@@ -16,8 +16,7 @@ df <- data.frame(
 )
 
 
-sunburst(df,
-         sortFunction = htmlwidgets::JS('function(x) {return x;}'))
+sunburst(df)
 new_order <- c(3,2,1)
 sunburst(df[new_order,],
          sortFunction = htmlwidgets::JS('function(x) {return x;}'))
