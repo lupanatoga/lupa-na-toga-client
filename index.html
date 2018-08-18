@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="container">
+        <div class="titulo">
+            <h1>Lupa na Toga</h1>
+        </div>
+        <div class="custo">
+            <p>Custos dos magistrados no mes XXXX</p>
+            <p>Porem o teto é XXXX, usando os auxilios vai para XXXX</p>
+        </div>
+        <div class="treemap">
+            XXXX
+        </div>
+        <div class="juizes">
+            <div class="row">
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+            </div>
+        </div>
+        <div class="tribunais">
+            <div class="row">
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+            </div>
+        </div>
+        <div class="plots">
+            <div>
+                {{ plotlyOutput("pointsPlot") }}
+            </div>
+            <div>
+                {{ plotlyOutput("linesPlot") }}
+            </div>
+            <div>
+                {{ sunburstOutput("sumburstPlot") }}
+            </div>
+            <div>
+                {{ textOutput("selection") }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
