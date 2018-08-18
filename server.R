@@ -113,7 +113,13 @@ shinyServer(function(input, output) {
               mode = "lines"
       )
     } else {
-      plotly_empty()
+      salarios_um = data %>% group_by(mes) %>%  summarise(total = sum(rendimento_liquido))
+      plot_ly(data = salarios_um,
+              y = ~ total,
+              x = ~ mes,
+              type = "scatter",
+              source = "temporal",
+              mode = "lines")
     }
   })
   
@@ -152,7 +158,16 @@ shinyServer(function(input, output) {
       
       sunburst(a)
     } else {
-      sunburst(df[FALSE,])
+      a = data %>% select(indenizacoes, direitos_pessoais, direitos_eventuais)
+      group = colnames(a)
+      a = t(a) %>% as_data_frame() 
+      a$group = group
+      a = a%>% rename(value = V1)
+      a$group <- as.factor(a$group)
+      
+      a = a %>% select(group, value)
+      
+      sunburst(a)
     }
   })
   
