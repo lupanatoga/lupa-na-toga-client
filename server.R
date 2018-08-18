@@ -3,9 +3,10 @@ library(tidyverse, warn.conflicts = F)
 library(plotly)
 library(sunburstR)
 library(dplyr)
+library(jsonlite)
 
 data = read_csv("./salarios-magistrados-2018-02-05.csv")
-data_1 = read_csv("./salarios-magistrados-2018-02-05.csv") 
+data_1 = fromJSON("-.txt") %>%  as_data_frame() 
 
 data = data %>% 
     mutate(total = rendimento_liquido + diarias, mes = 12) %>% 
