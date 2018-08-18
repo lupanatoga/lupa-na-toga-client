@@ -42,6 +42,7 @@ shinyServer(function(input, output) {
               y = ~ total,
               x = ~ mes,
               type = "scatter",
+              source = "temporal",
               mode = "lines"
       )
     } else {
@@ -57,10 +58,17 @@ shinyServer(function(input, output) {
   
   output$sumburstPlot  = renderSunburst({
     s <- event_data("plotly_click", source = "juiz")
+    s2 <- event_data("plotly_click", source = "temporal")
     if(length(s)) {
       juiz = sumario[s[["pointNumber"]]+1,]
       
-      a = salarios %>% filter(nome == juiz$nome) %>% select(indenizacoes, direitos_pessoais, direitos_eventuais)
+      if(length(s2)) {
+        salarios_temp = salarios %>%filter(mes == s2[["x"]])
+      } else {
+        salarios_temp = salarios
+      }
+      
+      a = salarios_temp %>% filter(nome == juiz$nome) %>% select(indenizacoes, direitos_pessoais, direitos_eventuais)
       group = colnames(a)
       a = t(a) %>% as_data_frame() 
       a$group = group
