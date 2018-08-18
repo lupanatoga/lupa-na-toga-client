@@ -6,6 +6,15 @@ library(dplyr)
 library(jsonlite)
 
 data = fromJSON("sample.txt") %>%  as_data_frame()
+salarios_t = data
+salarios_t[is.na(salarios_t)] = 0
+n=3
+teto = 33700
+n_mes = unique(salarios_t$mes_ano_referencia) %>% length()
+acima = salarios_t$rendimento_liquido - teto
+total_rendimentos = sum(salarios_t$rendimento_liquido)
+total_rendimentos_mes = total_rendimentos/n_mes
+porcentagem = total_rendimentos/(nrow(salarios_t)*teto)
 
 data = data %>% 
     mutate(total = rendimento_liquido + diarias, mes = strsplit(mes_ano_referencia, "/")[[1]][1]) %>% 
@@ -19,7 +28,43 @@ data = bind_rows(data, data_1)
 
 sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 shinyServer(function(input, output) {
+  output$his_jui  <- renderTable({
+    salarios_t %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
+  })
   
+  output$his_jui_last <- renderTable({
+    salarios_t %>% filter(mes_ano_referencia == max(mes_ano_referencia)) %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
+  })
+  
+  output$his_jui_mochi <- renderTable({
+    salarios_t %>% group_by(nome) %>% summarise(aux_diarias = sum(diarias)) %>% arrange(-aux_diarias) %>% slice(1:n)
+  })
+  
+  output$magis_laje <- renderTable({
+    salarios_t %>% group_by(nome) %>% summarise(aux_moradia = sum(auxilio_moradia)) %>% 
+      arrange(-aux_moradia) %>% slice(1:n)
+  })
+  
+  output$trib_wit_magis <- renderTable({
+    salarios_t %>% 
+      group_by(orgao, mes_ano_referencia) %>% 
+      mutate(auxilio_medio_magistrados = sum(direitos_pessoais, indenizacoes, direitos_eventuais)/n()) %>% 
+      select(orgao, mes_ano_referencia, auxilio_medio_magistrados) %>%
+      distinct() %>% 
+      arrange(-auxilio_medio_magistrados) %>%
+      slice(1:n)
+  })
+  
+  output$top_n_salarios <- renderTable({
+    salarios_t %>% 
+      filter(mes_ano_referencia == max(mes_ano_referencia)) %>%
+      group_by(orgao, mes_ano_referencia) %>% 
+      mutate(auxilio_medio_magistrados = sum(direitos_pessoais, indenizacoes, direitos_eventuais)/n()) %>% 
+      select(orgao, mes_ano_referencia, auxilio_medio_magistrados) %>%
+      distinct() %>% 
+      arrange(-auxilio_medio_magistrados) %>%
+      slice(1:n)
+  })
   
   output$pointsPlot <- renderPlotly({
     if(str_length(input$lotacao)) {
