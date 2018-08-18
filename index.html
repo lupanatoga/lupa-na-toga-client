@@ -21,30 +21,41 @@
         <div class="juizes">
             <div class="row">
                 <div class="col">
-
+                    
                 </div>
                 <div class="col">
-
+                    
                 </div>
                 <div class="col">
-
+                    
                 </div>
             </div>
         </div>
         <div class="tribunais">
             <div class="row">
                 <div class="col">
-
+                    
                 </div>
                 <div class="col">
-
+                    
                 </div>
                 <div class="col">
-
+                    
                 </div>
             </div>
         </div>
         <div class="plots">
+            <div class="row">
+                <div class="col">
+                    {{ uiOutput("orgao") }}
+                </div>
+                <div class="col">
+                    {{ uiOutput("lotacao")}}
+                </div>
+                <div class="col">
+                    {{ uiOutput("cargo")}}
+                </div>
+            </div>
             <div>
                 {{ plotlyOutput("pointsPlot") }}
             </div>

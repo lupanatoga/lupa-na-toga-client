@@ -5,25 +5,44 @@ library(sunburstR)
 library(dplyr)
 library(jsonlite)
 
-data = read_csv("./salarios-magistrados-2018-02-05.csv")
-data_1 = fromJSON("-.txt") %>%  as_data_frame() 
+data = fromJSON("sample.txt") %>%  as_data_frame()
 
 data = data %>% 
-    mutate(total = rendimento_liquido + diarias, mes = 12) %>% 
+    mutate(total = rendimento_liquido + diarias, mes = strsplit(mes_ano_referencia, "/")[[1]][1]) %>% 
   filter(total >= 0)
 
-data_1 = data_1 %>% 
-  mutate(total = rendimento_liquido + diarias, mes = 11) %>% 
-  filter(total >= 0)
+data_1 = data
 
-salarios <- bind_rows(data, data_1)
-salarios$mes <- as.character(salarios$mes)
+data_1 = data_1 %>%  mutate(mes = as.character(as.numeric(mes)+1))
 
+data = bind_rows(data, data_1)
+
+sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 shinyServer(function(input, output) {
-
-  sumario <- salarios %>% group_by(nome) %>% summarise(auxilio = sum(total))
+  
   
   output$pointsPlot <- renderPlotly({
+    if(str_length(input$lotacao)) {
+      data_ = data %>%  filter(lotacao == input$lotacao)
+    } else {
+      data_ = data
+    }
+    
+    if(str_length(input$orgao)) {
+      data_ = data_ %>%  filter(orgao == input$orgao)
+    } else {
+      data_ = data_
+    }
+    
+    if(str_length(input$cargo)) {
+      data_ = data_ %>%  filter(cargo == input$cargo)
+    } else {
+      data_ = data_
+    }
+    
+    sumario <- data_ %>% group_by(nome) %>% summarise(auxilio = sum(total))
+    
+    
     plot_ly(data = sumario, 
             x = ~ auxilio, 
             y = 0,
@@ -36,9 +55,11 @@ shinyServer(function(input, output) {
   output$linesPlot = renderPlotly({
     s <- event_data("plotly_click", source = "juiz")
     if(length(s)) {
+      
+      
+      
       juiz = sumario[s[["pointNumber"]]+1,]
-      salarios_um = salarios %>% filter(nome == juiz$nome)
-    
+      salarios_um = data %>% filter(nome == juiz$nome) %>%  select(total, mes)
       plot_ly(data = salarios_um,
               y = ~ total,
               x = ~ mes,
@@ -64,9 +85,9 @@ shinyServer(function(input, output) {
       juiz = sumario[s[["pointNumber"]]+1,]
       
       if(length(s2)) {
-        salarios_temp = salarios %>%filter(mes == s2[["x"]])
+        salarios_temp = data %>%filter(mes == s2[["x"]])
       } else {
-        salarios_temp = salarios
+        salarios_temp = data
       }
       
       a = salarios_temp %>% filter(nome == juiz$nome) %>% select(indenizacoes, direitos_pessoais, direitos_eventuais)
@@ -86,14 +107,14 @@ shinyServer(function(input, output) {
   
   
   output$orgao <- renderUI({
-    selectInput("Orgão", "Selecione um Orgão", data$orgao)
+    selectInput("orgao", "Selecione um Orgão", data$orgao)
   })
   
   output$lotacao <- renderUI({
-    selectInput("Lotação", "Selecione uma Lotação", data$lotacao)
+    selectInput("lotacao", "Selecione uma Lotação", data$lotacao)
   })
   
-  output$mes <- renderUI({
-    selectInput("Mes", "Mes referente", c('jan', 'fev', 'mar'))
+  output$cargo <- renderUI({
+    selectInput("cargo", "Cargo", data$cargo)
   })
 })
