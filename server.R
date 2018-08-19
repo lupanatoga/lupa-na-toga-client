@@ -4,6 +4,7 @@ library(plotly)
 library(sunburstR)
 library(dplyr)
 library(jsonlite)
+library(readr)
 
 data = fromJSON("sample.txt") %>%  as_data_frame()
 salarios_t = data
@@ -19,12 +20,6 @@ porcentagem = total_rendimentos/(nrow(salarios_t)*teto)
 data = data %>% 
     mutate(total = rendimento_liquido + diarias, mes = strsplit(mes_ano_referencia, "/")[[1]][1]) %>% 
   filter(total >= 0)
-
-data_1 = data
-
-data_1 = data_1 %>%  mutate(mes = as.character(as.numeric(mes)+1))
-
-data = bind_rows(data, data_1)
 
 sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 shinyServer(function(input, output) {
@@ -190,7 +185,7 @@ shinyServer(function(input, output) {
   })
   
   output$lotacao <- renderUI({
-    if(str_length(input$orgao) > 0) {
+    if(str_length(input$orgao)) {
       selectInput("lotacao", "Selecione uma Lotação", data$lotacao)
     } else {
       selectInput("lotacao", "Selecione uma Lotação", c())
@@ -198,7 +193,7 @@ shinyServer(function(input, output) {
   })
   
   output$cargo <- renderUI({
-    if(str_length(input$lotacao) > 0 && str_length(input$orgao) > 0) {
+    if(str_length(input$lotacao) && str_length(input$orgao)) {
       selectInput("cargo", "Cargo", data$cargo)
     } else {
       selectInput("cargo", "Cargo", c())

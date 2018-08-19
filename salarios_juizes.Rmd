@@ -1,0 +1,73 @@
+---
+title: "salarios_juizes"
+output: html_document
+---
+
+```{r}
+library("readr")
+library("dplyr")
+library("jsonlite")
+library("stringr")
+```
+
+```{r}
+salarios = read_csv("salarios_tratados.csv")
+
+n=3
+```
+
+```{r}
+
+max_mes_ano_referencia = "05/18"
+
+
+teto = 33700
+
+n_mes = unique(salarios$mes_ano_referencia) %>% length()
+acima = salarios$rendimento_liquido - teto
+total_rendimentos = sum(salarios$rendimento_liquido)
+
+total_rendimentos_mes = total_rendimentos/n_mes
+porcentagem = total_rendimentos/(nrow(salarios)*teto)
+```
+
+# Ranking salarios juizes
+### Historico
+```{r}
+top_n_salarios_historico = salarios %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
+```
+
+### Ultimo mes
+```{r}
+top_n_salarios_ultimo_mes = salarios %>% filter(mes_ano_referencia == max_mes_ano_referencia) %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
+```
+
+### Magistrado mochileiro
+```{r}
+top_n_diarias = salarios %>% group_by(nome) %>% summarise(aux_diarias = sum(diarias)) %>% 
+  arrange(-aux_diarias) %>% slice(1:n)
+```
+
+### Magistrado da laje
+```{r}
+top_n_moradia = salarios %>% group_by(nome) %>% summarise(aux_moradia = sum(auxilio_moradia)) %>% 
+  arrange(-aux_moradia) %>% slice(1:n)
+```
+
+### Magistrado estudioso
+```{r}
+top_n_escolar = salarios %>% group_by(nome) %>% summarise(auxilio_escola = sum(auxilio_pre_escolar)) %>% arrange(-auxilio_escola) %>% slice(1:n)
+```
+
+# Ranking despesas dos tribunais com magistrados
+```{r}
+top_n_salarios_historico = salarios %>% 
+  group_by(orgao, mes_ano_referencia) %>% 
+  mutate(auxilio_medio_magistrados = sum(direitos_pessoais, indenizacoes, direitos_eventuais)/n()) %>% 
+  select(orgao, mes_ano_referencia, auxilio_medio_magistrados) %>%
+  distinct() %>% 
+  arrange(-auxilio_medio_magistrados)
+
+top_n_salarios_historico[1:3,]
+```
+

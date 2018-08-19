@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+body {
+    font-family: 'Monserrat', 'sans-serif' !important
+}
+
+
+tr {
+    border-color: white!important;
+}
+
+th {
+    color: red!important;
+}
+
+.titulo {
+    padding: 1rem 0px;
+} 
+
+.juizes {
+    padding: 1rem 0px;
+} 
+
+.shiny-table {
+    margin: auto
+}

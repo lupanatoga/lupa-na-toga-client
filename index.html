@@ -5,11 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Lupa na Toga</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .sumburst {
-
-        }
-    </style>
+    <script src="./www/SCRIPT.js"></script>
 </head>
 <body>
     <div class="container">
@@ -24,49 +20,53 @@
             {{ sunburstOutput("fistPlot") }}
         </div>
         <div class="juizes">
+            <h2 class="text-center titulo">Top Excelentíssimos</h2>
             <div class="row">
-                <div class="col">
+                <div class="col-md-6">
                     {{ tableOutput("his_jui") }}
                 </div>
-                <div class="col">
+                <div class="col-md-6">
                     {{ tableOutput("his_jui_last") }}                    
-                </div>
-                <div class="col">
-                    {{ tableOutput("his_jui_mochi") }}                                        
                 </div>
             </div>
         </div>
         <div class="tribunais">
+            <h2 class="text-center titulo">Tribunais</h2>
             <div class="row">
-                <div class="col">
-                    {{ tableOutput("magis_laje") }}                                                            
+                <div class="col-md-6" style="text-align: center">
+                    <div class="titulo" style="text-align: left">     
+                        {{ tableOutput("magis_laje") }}                                                            
+                    </div>
                 </div>
-                <div class="col">
+                <div class="col-md-6">
                     {{ tableOutput("trib_wit_magis") }}                                                                                
                 </div>
-                <div class="col">
+                <div class="col-md-8 col-md-offset-2">
                     {{ tableOutput("top_n_salarios") }}                                                                                                    
                 </div>
             </div>
         </div>
         <div class="plots">
+            <h2 class="text-center titulo">"Auxilios"</h2>
             <div class="row">
-                <div class="col col-4">
+                <div class="col-md-3 col-md-offset-2">
                     {{ uiOutput("orgao") }}
                 </div>
-                <div class="col col-4">
+                <div class="col-md-3">
                     {{ uiOutput("lotacao")}}
                 </div>
-                <div class="col col-4">
+                <div class="col-md-3">
                     {{ uiOutput("cargo")}}
                 </div>
             </div>
             <div>
                 {{ plotlyOutput("pointsPlot") }}
             </div>
+            <h2 class="text-center titulo">Histórico de recebimentos</h2>
             <div>
                 {{ plotlyOutput("linesPlot") }}
             </div>
+            <h2 class="text-center titulo">Proporção dos auxilios no total</h2>
             <div>
                 {{ sunburstOutput("sumburstPlot") }}
             </div>
