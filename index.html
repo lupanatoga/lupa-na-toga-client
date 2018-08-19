@@ -12,49 +12,69 @@
         <div class="titulo">
             <h1>Logo</h1>
         </div>
-        <div class="text-center" style="font-size: 20px;">
-            <p>Custos dos magistrados por mes: </p>
-            {{total_rendimentos_mes}}. {{ porcentagem }} %
+        <div class="text-center" style="font-size: 40px;">
+            Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
+
         </div>
+        <div class="text-center" style="font-size: 40px;">
+            Pagamentos totais: <strong>{{ porcentagem }}% </strong>acima do teto.
+        </div>
+
         <div>
             {{ sunburstOutput("fistPlot") }}
         </div>
+        <hr>
         <div class="juizes">
             <h2 class="text-center titulo">Top Excelentíssimos</h2>
             <div class="row">
                 <div class="col-md-6">
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
                     {{ tableOutput("his_jui") }}
                 </div>
                 <div class="col-md-6">
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
                     {{ tableOutput("his_jui_last") }}                    
                 </div>
             </div>
         </div>
+        <hr>
         <div class="tribunais">
             <h2 class="text-center titulo">Tribunais</h2>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    {{ tableOutput("top_n_salarios") }}                                                                                                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    {{ tableOutput("magis_mochi") }}                                                                                                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    {{ tableOutput("magis_laje") }}                                                                                                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    {{ tableOutput("magis_estudiosos") }}                                                                                                    
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
+                    {{ tableOutput("top_n_salarios") }}
                 </div>
             </div>
         </div>
+        <hr>
+        <div class="auxilios">
+            <h2 class="text-center titulo">Auxilios</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
+                    {{ tableOutput("magis_mochi") }}
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
+                    {{ tableOutput("magis_laje") }}
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center">titulo</h3>
+                    <p class="text-center">subtitulo</p>
+                    {{ tableOutput("magis_estudiosos") }}
+                </div>
+            </div>
+        </div>
+
         <div class="plots">
-            <h2 class="text-center titulo">"Auxilios"</h2>
+            <hr>
+            <h2 class="text-center titulo">Histórico de recebimentos</h2>
             <div class="row">
                  <div class="col-md-3 col-md-offset-2">
                     {{ uiOutput("orgao") }}
@@ -69,17 +89,20 @@
             <div>
                 {{ plotlyOutput("pointsPlot") }}
             </div>
-            <h2 class="text-center titulo">Histórico de recebimentos</h2>
-             <div>
+            <hr>
+            <h2 class="text-center titulo">Proporção dos auxilios no total</h2>
+            <div>
                 {{ plotlyOutput("linesPlot") }}
             </div>
-            <h2 class="text-center titulo">Proporção dos auxilios no total</h2>
             <div>
                 {{ sunburstOutput("sumburstPlot") }}
             </div>
             <div>
                 {{ textOutput("selection") }}
             </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='https://github.com/lupanatoga/lupa-na-toga-client/blob/master/salarios_tratados_com_mes.csv'">Baixar .csv</button>
         </div>
     </div>
 </body>

@@ -16,7 +16,8 @@ n_mes = unique(salarios_t$mes_ano_referencia) %>% length()
 acima = salarios_t$rendimento_liquido - teto
 total_rendimentos = sum(salarios_t$rendimento_liquido)
 total_rendimentos_mes = total_rendimentos/n_mes
-porcentagem = (total_rendimentos/(nrow(salarios_t)*teto))*100
+total_rendimentos_mes_milhoes = as.integer((total_rendimentos/n_mes) / 1000000)
+porcentagem = as.integer((total_rendimentos/(nrow(salarios_t)*teto))*100)
 max_mes_ano_referencia = "04/18"
 
 # get_mes <- function(mes_ano){
@@ -42,6 +43,10 @@ shinyServer(function(input, output) {
   
   output$total_rendimentos_mes <- renderText({
     total_rendimentos_mes
+  })
+  
+  output$total_rendimentos_mes_milhoes <- renderText({
+    total_rendimentos_mes_milhoes
   })
   
   output$porcentagem <- renderText({
@@ -204,12 +209,12 @@ shinyServer(function(input, output) {
   }
   
   output$orgao <- renderUI({
-      selectInput("orgao", "Selecione um Orgão", data$orgao %>% unique())
+      selectInput("orgao", "Selecione um Orgão", choices = data$orgao %>% unique(), selected = NULL)
   })
   
   output$lotacao <- renderUI({
     if(str_length(input$orgao) > 0) {
-      selectInput("lotacao", "Selecione uma Lotação", data$lotacao %>%  unique())
+      selectInput("lotacao", "Selecione uma Lotação", choices = data$lotacao %>%  unique(), selected = NULL)
     } else {
       selectInput("lotacao", "Selecione uma Lotação", c())
     }
@@ -217,7 +222,7 @@ shinyServer(function(input, output) {
   
   output$cargo <- renderUI({
     if(str_length(input$lotacao) > 0 && str_length(input$orgao) > 0) {
-      selectInput("cargo", "Cargo", data$cargo %>%  unique())
+      selectInput("cargo", "Cargo", choices = data$cargo %>%  unique(), selected = NULL)
     } else {
       selectInput("cargo", "Cargo", c())
     }
