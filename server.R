@@ -224,7 +224,7 @@ shinyServer(function(input, output) {
     #png(filename = )
     # When input$n is 3, filename is ./images/image3.jpeg
     #file.path("./www/LUPANATOGA_horizontal.png")
-    tags$img(src = "www/LUPANATOGA_horizontal.png")
+    tags$img(src = "https://raw.githubusercontent.com/lupanatoga/lupa-na-toga-client/master/www/LUPANATOGA_horizontal.png")
   })
   
   output$cargo <- renderUI({
