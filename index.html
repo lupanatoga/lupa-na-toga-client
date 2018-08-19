@@ -17,7 +17,7 @@
 
         </div>
         <div class="text-center" style="font-size: 40px;">
-            Pagamentos totais: <strong>{{ porcentagem }}% </strong>acima do teto.
+            Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
         </div>
 
         <div>
@@ -28,13 +28,13 @@
             <h2 class="text-center titulo">Top Excelentíssimos</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">Campeões Históricos</h3>
+                    <p class="text-center">Top magistrados que mais receberam em um único mês, no período entre nov/2017 a abr/2018</p>
                     {{ tableOutput("his_jui") }}
                 </div>
                 <div class="col-md-6">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">Funcionarios do mês</h3>
+                    <p class="text-center">Top magistrados que mais receberam no mês de referência.</p>
                     {{ tableOutput("his_jui_last") }}                    
                 </div>
             </div>
@@ -44,8 +44,8 @@
             <h2 class="text-center titulo">Tribunais</h2>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">Quem dá mais?</h3>
+                    <p class="text-center">Tribunais com maiores despesas com auxílios</p>
                     {{ tableOutput("top_n_salarios") }}
                 </div>
             </div>
@@ -55,18 +55,18 @@
             <h2 class="text-center titulo">Auxilios</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">Mochileiros</h3>
+                    <p class="text-center">Magistrados que mais receberam diárias de viagem, no período entre nov/2017 a abr/2018</p>
                     {{ tableOutput("magis_mochi") }}
                 </div>
                 <div class="col-md-4">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">Minha casa meu auxílio</h3>
+                    <p class="text-center">Magistrados que mais receberam auxílio moradia, no período entre nov/2017 a abr/2018</p>
                     {{ tableOutput("magis_laje") }}
                 </div>
                 <div class="col-md-4">
-                    <h3 class="text-center">titulo</h3>
-                    <p class="text-center">subtitulo</p>
+                    <h3 class="text-center">"Bolsa escola"</h3>
+                    <p class="text-center">Magistrados que mais receberam auxílio pré escola, no período entre nov/2017 a abr/2018</p>
                     {{ tableOutput("magis_estudiosos") }}
                 </div>
             </div>
