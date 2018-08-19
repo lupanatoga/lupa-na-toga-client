@@ -220,6 +220,13 @@ shinyServer(function(input, output) {
     }
   })
   
+  output$logo = renderUI({
+    #png(filename = )
+    # When input$n is 3, filename is ./images/image3.jpeg
+    #file.path("./www/LUPANATOGA_horizontal.png")
+    tags$img(src = "www/LUPANATOGA_horizontal.png")
+  })
+  
   output$cargo <- renderUI({
     if(str_length(input$lotacao) > 0 && str_length(input$orgao) > 0) {
       selectInput("cargo", "Cargo", choices = data$cargo %>%  unique(), selected = NULL)
