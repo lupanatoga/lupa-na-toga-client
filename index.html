@@ -8,19 +8,20 @@
     <script src="./www/SCRIPT.js"></script>
 </head>
 <body>
+    <div class="titulo">
+        {{
+        uiOutput(outputId = "logo")
+        }}
+    </div>
     <div class="container">
-        <div class="titulo" style="width: 100px; height: 20px">
-            {{
-                uiOutput(outputId = "logo")
-            }}
-            <h1>Logo</h1>
-        </div>
-        <div class="text-center" style="font-size: 40px;">
-            Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
+        <div class="tinhaDeixadoTitulo">
+            <div class="text-center" style="font-size: 40px;">
+                Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
 
-        </div>
-        <div class="text-center" style="font-size: 40px;">
-            Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
+            </div>
+            <div class="text-center" style="font-size: 40px;">
+                Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
+            </div>
         </div>
 
         <div>
@@ -41,6 +42,25 @@
                     {{ tableOutput("his_jui_last") }}                    
                 </div>
             </div>
+
+            <h3 class="text-center titulo">Auxilios</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="text-center">Mochileiros</h4>
+                    <p class="text-center">Magistrados que mais receberam diárias de viagem, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_mochi") }}
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-center">Minha casa meu auxílio</h4>
+                    <p class="text-center">Magistrados que mais receberam auxílio moradia, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_laje") }}
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-center">"Bolsa escola"</h4>
+                    <p class="text-center">Magistrados que mais receberam auxílio pré escola, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_estudiosos") }}
+                </div>
+            </div>
         </div>
         <hr>
         <div class="tribunais">
@@ -55,24 +75,7 @@
         </div>
         <hr>
         <div class="auxilios">
-            <h2 class="text-center titulo">Auxilios</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <h3 class="text-center">Mochileiros</h3>
-                    <p class="text-center">Magistrados que mais receberam diárias de viagem, no período entre nov/2017 a abr/2018</p>
-                    {{ tableOutput("magis_mochi") }}
-                </div>
-                <div class="col-md-4">
-                    <h3 class="text-center">Minha casa meu auxílio</h3>
-                    <p class="text-center">Magistrados que mais receberam auxílio moradia, no período entre nov/2017 a abr/2018</p>
-                    {{ tableOutput("magis_laje") }}
-                </div>
-                <div class="col-md-4">
-                    <h3 class="text-center">"Bolsa escola"</h3>
-                    <p class="text-center">Magistrados que mais receberam auxílio pré escola, no período entre nov/2017 a abr/2018</p>
-                    {{ tableOutput("magis_estudiosos") }}
-                </div>
-            </div>
+
         </div>
 
         <div class="plots">
