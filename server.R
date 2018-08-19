@@ -7,7 +7,7 @@ library(jsonlite)
 library(readr)
 library(zoo)
 
-data = read_csv("salarios_tratados.csv")
+data = read_csv("salarios_tratados_com_mes.csv")
 salarios_t = data
 salarios_t[is.na(salarios_t)] = 0
 n=3
@@ -16,28 +16,36 @@ n_mes = unique(salarios_t$mes_ano_referencia) %>% length()
 acima = salarios_t$rendimento_liquido - teto
 total_rendimentos = sum(salarios_t$rendimento_liquido)
 total_rendimentos_mes = total_rendimentos/n_mes
-porcentagem = total_rendimentos/(nrow(salarios_t)*teto)
+porcentagem = (total_rendimentos/(nrow(salarios_t)*teto))*100
 max_mes_ano_referencia = "04/18"
 
-get_mes <- function(mes_ano){
-  gera_data_invertida <- function(vetor){
-    paste(vetor[2],vetor[1],sep="-") %>% as.yearmon()
-  }
-  mes_ano = data$mes_ano_referencia
-  data_splitted = strsplit(mes_ano, "/")
-  unlist(lapply(data_splitted, gera_data_invertida))
-}
-
-data$mes = get_mes(data$mes_ano_referencia)
-
-data = data %>%
-    mutate(total = rendimento_liquido + diarias) %>%
-  filter(total >= 0)
+# get_mes <- function(mes_ano){
+#   gera_data_invertida <- function(vetor){
+#     paste(vetor[2],vetor[1],sep="-") #%>% as.yearmon()
+#   }
+#   mes_ano = data$mes_ano_referencia
+#   data_splitted = strsplit(mes_ano, "/")
+#   unlist(lapply(data_splitted, gera_data_invertida))
+# }
+# 
+# data$mes = get_mes(data$mes_ano_referencia)
+# 
+# data = data %>%
+#     mutate(total = rendimento_liquido + diarias) %>%
+#   filter(total >= 0)
 
 sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 shinyServer(function(input, output) {
   output$his_jui  <- renderTable({
     salarios_t %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
+  })
+  
+  output$total_rendimentos_mes <- renderText({
+    total_rendimentos_mes
+  })
+  
+  output$porcentagem <- renderText({
+    porcentagem * 100
   })
   
   output$his_jui_last <- renderTable({
@@ -174,6 +182,7 @@ shinyServer(function(input, output) {
       }
       
       magistrado = salarios_temp %>% filter(nome == juiz$nome)
+      print(colnames(magistrado))
       render_sunburst(magistrado)
     } else {
       NULL
