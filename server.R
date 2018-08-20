@@ -1,39 +1,33 @@
-library(shiny)
-library(tidyverse, warn.conflicts = F)
-library(plotly)
 library(sunburstR)
+library(shiny)
+library(tidyverse)
+library(plotly)
 library(dplyr)
 library(jsonlite)
 library(readr)
 library(zoo)
+library(htmltools)
 
 data = read_csv("salarios_tratados_com_mes.csv")
+
 salarios_t = data
 salarios_t[is.na(salarios_t)] = 0
+
 n=3
 teto = 33700
+
 n_mes = unique(salarios_t$mes_ano_referencia) %>% length()
-acima = salarios_t$rendimento_liquido - teto
+
 total_rendimentos = sum(salarios_t$rendimento_liquido)
 total_rendimentos_mes = total_rendimentos/n_mes
 total_rendimentos_mes_milhoes = as.integer((total_rendimentos/n_mes) / 1000000)
-porcentagem = as.integer((total_rendimentos/(nrow(salarios_t)*teto))*100)
-max_mes_ano_referencia = "04/18"
 
-# get_mes <- function(mes_ano){
-#   gera_data_invertida <- function(vetor){
-#     paste(vetor[2],vetor[1],sep="-") #%>% as.yearmon()
-#   }
-#   mes_ano = data$mes_ano_referencia
-#   data_splitted = strsplit(mes_ano, "/")
-#   unlist(lapply(data_splitted, gera_data_invertida))
-# }
-# 
-# data$mes = get_mes(data$mes_ano_referencia)
-# 
-# data = data %>%
-#     mutate(total = rendimento_liquido + diarias) %>%
-#   filter(total >= 0)
+acima = salarios_t$rendimento_liquido - teto
+
+
+porcentagem = as.integer((total_rendimentos/(nrow(salarios_t)*teto))*100)
+
+max_mes_ano_referencia = "04/18"
 
 sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 shinyServer(function(input, output) {
@@ -41,16 +35,16 @@ shinyServer(function(input, output) {
     salarios_t %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
   })
   
-  output$total_rendimentos_mes <- renderText({
+  output$plot_total_rendimentos_mes <- renderText({
     total_rendimentos_mes
   })
   
-  output$total_rendimentos_mes_milhoes <- renderText({
+  output$plot_total_rendimentos_mes_milhoes <- renderText({
     total_rendimentos_mes_milhoes
   })
   
-  output$porcentagem <- renderText({
-    porcentagem * 100
+  output$plot_porcentagem <- renderText({
+    porcentagem
   })
   
   output$his_jui_last <- renderTable({
@@ -169,7 +163,7 @@ shinyServer(function(input, output) {
   }
   
   output$fistPlot <- renderSunburst({
-    render_sunburst(data)
+    add_shiny(render_sunburst(data))
   })
   
   output$selection = renderText(selection())
@@ -187,8 +181,7 @@ shinyServer(function(input, output) {
       }
       
       magistrado = salarios_temp %>% filter(nome == juiz$nome)
-      print(colnames(magistrado))
-      render_sunburst(magistrado)
+      add_shiny(render_sunburst(magistrado))
     } else {
       NULL
     }
@@ -221,10 +214,7 @@ shinyServer(function(input, output) {
   })
   
   output$logo = renderUI({
-    #png(filename = )
-    # When input$n is 3, filename is ./images/image3.jpeg
-    #file.path("./www/LUPANATOGA_horizontal.png")
-    tags$img(src = "https://raw.githubusercontent.com/lupanatoga/lupa-na-toga-client/master/www/logo-fodona.jpg", width = "100%")
+    tags$img(src = "https://raw.githubusercontent.com/lupanatoga/lupa-na-toga-client/master/www/logo-fodona.jpg", width="100%")
   })
   
   output$cargo <- renderUI({
@@ -236,4 +226,3 @@ shinyServer(function(input, output) {
   })
   
 })
-

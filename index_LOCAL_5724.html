@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lupa na Toga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./www/SCRIPT.js"></script>
+</head>
+<body>
+    <div class="titulo">
+        {{
+        uiOutput(outputId = "logo")
+        }}
+    </div>
+    <div class="container">
+        <div class="tinhaDeixadoTitulo">
+            <div class="text-center" style="font-size: 40px;">
+                Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
+
+            </div>
+            <div class="text-center" style="font-size: 40px;">
+                Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
+            </div>
+        </div>
+
+        <div>
+            {{ sunburstOutput("fistPlot") }}
+        </div>
+        <hr>
+        <div class="juizes">
+            <h2 class="text-center titulo">Top Excelentíssimos</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="text-center">Campeões Históricos</h3>
+                    <p class="text-center">Top magistrados que mais receberam em um único mês, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("his_jui") }}
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-center">Funcionarios do mês</h3>
+                    <p class="text-center">Top magistrados que mais receberam no mês de referência.</p>
+                    {{ tableOutput("his_jui_last") }}                    
+                </div>
+            </div>
+
+            <h3 class="text-center titulo">Auxilios</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="text-center">Mochileiros</h4>
+                    <p class="text-center">Magistrados que mais receberam diárias de viagem, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_mochi") }}
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-center">Minha casa meu auxílio</h4>
+                    <p class="text-center">Magistrados que mais receberam auxílio moradia, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_laje") }}
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-center">"Bolsa escola"</h4>
+                    <p class="text-center">Magistrados que mais receberam auxílio pré escola, no período entre nov/2017 a abr/2018</p>
+                    {{ tableOutput("magis_estudiosos") }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="tribunais">
+            <h2 class="text-center titulo">Tribunais</h2>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h3 class="text-center">Quem dá mais?</h3>
+                    <p class="text-center">Tribunais com maiores despesas com auxílios</p>
+                    {{ tableOutput("top_n_salarios") }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="auxilios">
+
+        </div>
+
+        <div class="plots">
+            <hr>
+            <h2 class="text-center titulo">Histórico de recebimentos</h2>
+            <div class="row">
+                 <div class="col-md-3 col-md-offset-2">
+                    {{ uiOutput("orgao") }}
+                </div>
+                <div class="col-md-3">
+                    {{ uiOutput("lotacao")}}
+                </div>
+                <div class="col-md-3">
+                    {{ uiOutput("cargo")}}
+                </div>
+            </div>
+            <div>
+                {{ plotlyOutput("pointsPlot") }}
+            </div>
+            <hr>
+            <h2 class="text-center titulo">Proporção dos auxilios no total</h2>
+            <div>
+                {{ plotlyOutput("linesPlot") }}
+            </div>
+            <div>
+                {{ sunburstOutput("sumburstPlot") }}
+            </div>
+            <div>
+                {{ textOutput("selection") }}
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='https://github.com/lupanatoga/lupa-na-toga-client/blob/master/salarios_tratados_com_mes.csv'">Baixar .csv</button>
+        </div>
+    </div>
+</body>
+</html>
