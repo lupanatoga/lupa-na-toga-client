@@ -8,19 +8,18 @@
     <script src="./www/SCRIPT.js"></script>
 </head>
 <body>
+    <div class="titulo">
+        {{
+            uiOutput(outputId = "logo")
+        }}
+    </div>
     <div class="container">
-        <div class="titulo" style="width: 100px; height: 20px">
-            {{
-                uiOutput(outputId = "logo")
-            }}
-            <h1>Logo</h1>
-        </div>
         <div class="text-center" style="font-size: 40px;">
-            Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
+            Custos dos magistrados por mes: <strong>R$ {{uiOutput("plot_total_rendimentos_mes_milhoes")}} milhões</strong>
 
         </div>
         <div class="text-center" style="font-size: 40px;">
-            Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
+            Rendimentos liquidos <strong>{{ uiOutput("plot_porcentagem") }}% </strong>acima do teto.
         </div>
 
         <div>
