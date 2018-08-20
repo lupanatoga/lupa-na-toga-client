@@ -1,5 +1,6 @@
 library(shiny)
 library(plotly)
+library(sunburstR)
 # Define UI
 
 shinyUI(bootstrapPage(

@@ -1,11 +1,12 @@
-library(shiny)
-library(tidyverse, warn.conflicts = F)
-library(plotly)
 library(sunburstR)
+library(shiny)
+library(tidyverse)
+library(plotly)
 library(dplyr)
 library(jsonlite)
 library(readr)
 library(zoo)
+library(htmltools)
 
 data = read_csv("salarios_tratados_com_mes.csv")
 
@@ -162,7 +163,7 @@ shinyServer(function(input, output) {
   }
   
   output$fistPlot <- renderSunburst({
-    render_sunburst(data)
+    add_shiny(render_sunburst(data))
   })
   
   output$selection = renderText(selection())
@@ -180,8 +181,7 @@ shinyServer(function(input, output) {
       }
       
       magistrado = salarios_temp %>% filter(nome == juiz$nome)
-      print(colnames(magistrado))
-      render_sunburst(magistrado)
+      add_shiny(render_sunburst(magistrado))
     } else {
       NULL
     }
