@@ -8,13 +8,28 @@ library("readr")
 library("dplyr")
 library("jsonlite")
 library("stringr")
+library("plotly")
+library("tidyverse")
+library("lubridate")
 ```
 
+
 ```{r}
-salarios = read_csv("salarios_tratados.csv")
+salarios = read_csv("salarios_tratados_com_mes.csv")
 
 n=3
 ```
+
+
+## Transformando de char para date.
+```{r}
+#salarios$mes_ano_referencia <- as.character.Date(salarios$mes_ano_referencia)
+salarios$mes_ano_referencia <- paste0("01/",salarios$mes_ano_referencia )
+
+salarios$mes_ano_referencia <- dmy(salarios$mes_ano_referencia)
+teste <- as.Date(salarios$mes_ano_referencia, "%Y-%m")
+```
+
 
 ```{r}
 
@@ -69,5 +84,24 @@ top_n_salarios_historico = salarios %>%
   arrange(-auxilio_medio_magistrados)
 
 top_n_salarios_historico[1:3,]
+```
+
+
+
+## Teste no quesito da data. 
+```{r}
+juiz <- salarios %>%
+  filter(nome == "Flávio Mariano Mundim")
+
+ordenado <- juiz  %>% arrange(mes_ano_referencia)
+juiz  %>%
+      arrange(mes_ano_referencia) %>%
+      plot_ly(y = ~ total,
+              x = ~ mes_ano_referencia,
+              type = "scatter",
+              mode = 'lines',
+              source = "temporal")
+
+
 ```
 
