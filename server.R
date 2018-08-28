@@ -162,9 +162,18 @@ shinyServer(function(input, output) {
     root = root.parent
     }
     p = (100*d.value/root.value).toPrecision(3);
-    if(root.value >= 1000000000) {
-    y =   Math.round(root.value/1000000000) + 'B';
+    y = root.value;
+    
+    if(y >= 1000000000) {
+    y =   Math.round(y/1000000000) + 'B';
     }
+    if(y <= 1000000000 && y >= 1000000) {
+    y =   Math.round(y/1000000) + 'M';
+    }
+    if(y < 1000000 && y > 999) {
+    y =  Math.round(y/1000) + 'K';
+    }
+
     x = d.value
     if(x  >= 1000000000) {
     x =   Math.round(x/1000000000) + 'B';
@@ -175,7 +184,7 @@ shinyServer(function(input, output) {
     }
     
     
-    if(x < 1000000) {
+    if(x < 1000000 && x > 999) {
     x =  Math.round(x/1000) + 'K';
     }
     msg = p +' %<br/>'+x+' de '+ y;
