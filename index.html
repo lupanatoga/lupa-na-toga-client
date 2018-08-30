@@ -16,11 +16,11 @@
     <div class="container">
         <div class="tinhaDeixadoTitulo">
             <div class="text-center" style="font-size: 40px;">
-                Custos dos magistrados por mes: <strong>R$ {{total_rendimentos_mes_milhoes}} milhões</strong>
+                Custos dos magistrados por mes: <strong>R$ {{uiOutput("plot_total_rendimentos_mes_milhoes")}} milhões</strong>
 
             </div>
             <div class="text-center" style="font-size: 40px;">
-                Rendimentos liquidos <strong>{{ porcentagem }}% </strong>acima do teto.
+                Rendimentos liquidos <strong>{{ uiOutput("plot_porcentagem") }}% </strong>acima do teto.
             </div>
         </div>
 
