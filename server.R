@@ -28,7 +28,9 @@ acima = salarios_t$rendimento_liquido - teto
 
 
 porcentagem = as.integer((total_rendimentos/(nrow(salarios_t)*teto))*100)
+# auxiliar variables
 sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
+data_ = data
 
 max_mes_ano_referencia = "04/18"
 shinyServer(function(input, output) {
@@ -116,23 +118,28 @@ shinyServer(function(input, output) {
   })
   
   output$pointsPlot <- renderPlotly({
-    if(str_length(input$lotacao)) {
-      data_ = data %>%  filter(lotacao == input$lotacao)
+    if(str_length(input$orgao)) {
+      data_ = data %>%  filter(orgao == input$orgao)
     } else {
       data_ = data
     }
+    print(data_$orgao %>% unique())
     
-    if(str_length(input$orgao)) {
-      data_ = data_ %>%  filter(orgao == input$orgao)
+    if(str_length(input$lotacao)) {
+      data_ = data_ %>%  filter(lotacao == input$lotacao)
     } else {
       data_ = data_
     }
+    
+    print(data_$lotacao %>% unique())
     
     if(str_length(input$cargo)) {
       data_ = data_ %>%  filter(cargo == input$cargo)
     } else {
       data_ = data_
     }
+    
+    print(data_$cargo %>% unique())
     
     sumario <- data_ %>% group_by(nome) %>% summarise(auxilio = sum(total))
     
@@ -257,27 +264,27 @@ shinyServer(function(input, output) {
   }
   
   output$orgao <- renderUI({
-      selectInput("orgao", "Selecione um Orgão", choices = data$orgao %>% unique(), selected = NULL)
+      selectInput("orgao", "Selecione um Orgão", choices = c("", data$orgao %>% unique()), selected = '')
   })
   
   output$lotacao <- renderUI({
     if(str_length(input$orgao) > 0) {
-      selectInput("lotacao", "Selecione uma Lotação", choices = data$lotacao %>%  unique(), selected = NULL)
+      selectInput("lotacao", "Selecione uma Lotação", choices = c("", data_$lotacao %>%  unique()), selected = NULL)
     } else {
       selectInput("lotacao", "Selecione uma Lotação", c())
     }
   })
   
-  output$logo = renderUI({
-    tags$img(src = "https://raw.githubusercontent.com/lupanatoga/lupa-na-toga-client/master/www/logo-fodona.jpg", width="100%")
-  })
-  
   output$cargo <- renderUI({
-    if(str_length(input$lotacao) > 0 && str_length(input$orgao) > 0) {
-      selectInput("cargo", "Cargo", choices = data$cargo %>%  unique(), selected = NULL)
+    if(str_length(input$orgao) > 0 && str_length(input$lotacao) > 0) {
+      selectInput("cargo", "Cargo", c("", choices = data_$cargo %>%  unique()), selected = NULL)
     } else {
       selectInput("cargo", "Cargo", c())
     }
+  })
+  
+  output$logo = renderUI({
+    tags$img(src = "https://raw.githubusercontent.com/lupanatoga/lupa-na-toga-client/master/www/logo-fodona.jpg", width="100%")
   })
   
 })
