@@ -33,7 +33,7 @@ sumario <- data %>% group_by(nome) %>% summarise(auxilio = sum(total))
 data_ = data
 
 max_mes_ano_referencia = "04/18"
-shinyServer(function(input, output) {
+shinyServer(function(session, input, output) {
   output$his_jui  <- renderTable({
     salarios_t %>% arrange(-rendimento_liquido) %>% slice(1:n) %>% select(nome, mes_ano_referencia, rendimento_liquido)
   })
@@ -159,7 +159,6 @@ shinyServer(function(input, output) {
     if(length(s)) {
       juiz = sumario[s[["pointNumber"]]+1,]
       salarios_um = data %>% filter(nome == juiz$nome) %>% group_by(mes_ano_referencia) %>%  summarise(total = sum(rendimento_liquido))
-      print(salarios_um)
       plot_ly(data = salarios_um,
               y = ~ total,
               x = ~ mes_ano_referencia,
@@ -249,23 +248,12 @@ shinyServer(function(input, output) {
     }
   })
   
-  get_lotacao = function() {
-    return( data_ %>% 
-        filter(nome %in% sumario$nome)) %>% 
-        select(lotacao) %>% 
-        distinct()
-  }
-  
-  get_cargo = function() {
-    return( data_ %>% 
-              filter(nome %in% sumario$nome)) %>% 
-      select(cargo) %>% 
-      distinct()
-  }
-  
   output$orgao <- renderUI({
       selectInput("orgao", "Selecione um Orgão", choices = c("", data$orgao %>% unique()), selected = '')
   })
+  
+  observeEvent(input$orgao, updateSelectInput(session, "lotacao", "Selecione uma Lotação", 
+              choices = c("", data_ %>% filter(orgao == input$orgao) %>% select(lotacao) %>% unique()), selected = NULL))
   
   output$lotacao <- renderUI({
     if(str_length(input$orgao) > 0) {
@@ -275,9 +263,12 @@ shinyServer(function(input, output) {
     }
   })
   
+  observeEvent(input$lotacao, updateSelectInput(session, "cargo", "Cargo", 
+                                              choices = data_ %>% filter(lotacao == input$lotacao & orgao==input$orgao ) %>% select(cargo) %>% unique(), selected = NULL))
+  
   output$cargo <- renderUI({
-    if(str_length(input$orgao) > 0 && str_length(input$lotacao) > 0) {
-      selectInput("cargo", "Cargo", c("", choices = data_$cargo %>%  unique()), selected = NULL)
+    if((str_length(input$orgao) > 0) && (str_length(input$lotacao) > 0)) {
+      selectInput("cargo", "Cargo", choices = c("", data_$cargo %>%  unique()), selected = NULL)
     } else {
       selectInput("cargo", "Cargo", c())
     }
